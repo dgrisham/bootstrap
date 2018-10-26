@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+exec 2>> main_log
+
 user='grish'
 alias paccmd='pacman -S --noconfirm'
 basedir="$(dirname $(readlink -f $0))"
