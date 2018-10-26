@@ -10,7 +10,7 @@ basedir="$(dirname $(readlink -f $0))"
 pacman -Syyuq --noconfirm
 
 # git
-paccmd -S git
+paccmd git
 
 # yaourt
 cd /tmp
