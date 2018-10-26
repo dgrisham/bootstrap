@@ -20,7 +20,7 @@ for pkg in 'package-query' 'yaourt'; do
     makepkg -si
     cd ..
 done
-cd $basedir
+cd "$basedir"
 
 # editor
 yaourt --noconfirm kakoune-git
