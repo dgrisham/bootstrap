@@ -33,8 +33,10 @@ fi
 # temporarily give password-less sudo access to user to automate makepkg
 echo "$user ALL=(ALL) NOPASSWD: ALL" | EDITOR='tee -a' visudo
 
+# update before we do anything
+pacman -Syyu --noconfirm
 sudo -H -u "$user" ./1-env.sh
-sudo -H -u "$user" ./2-user.sh
+sudo -H -u "$user" ./2-user.sh bootstrap all
 
 # remove password-less sudo privilege for user
 sed -i "/$user ALL=(ALL) NOPASSWD: ALL/d" /etc/sudoers

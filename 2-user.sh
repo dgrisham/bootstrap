@@ -22,40 +22,39 @@ bootstrap() {
     # TODO: would be nice to run as 'bootstrap prezto bin git ...'
     local cmd="$1"
     shift
-    # update before we do anything
-    sudo pacman -Syyu --noconfirm
     case "$cmd" in
-	prezto)
+        prezto)
             bootstrap_prezto
             ;;
-	bin)
+        bin)
             bootstrap_bin
             ;;
-	git)
+        git)
             bootstrap_git
             ;;
         tmux)
             bootstrap_tmux
             ;;
-	yaourt)
+        yaourt)
             bootstrap_yaourt
             ;;
-	python)
+        python)
             bootstrap_python
             ;;
-	kak)
+        kak)
             bootstrap_kak
             ;;
-	kak_lsp)
+        kak_lsp)
             bootstrap_kak_lsp
             ;;
         kak_addons)
             bootstrap_kak_addons
             ;;
-	wenv)
+        wenv)
             bootstrap_wenv
             ;;
         all)
+            sudo pacman -Syyu --noconfirm
             bootstrap_prezto
             bootstrap_bin
             bootstrap_git
@@ -75,34 +74,34 @@ reset() {
     local cmd="$1"
     shift
     case "$cmd" in
-	prezto)
+        prezto)
             reset_prezto
             ;;
-	bin)
+        bin)
             reset_bin
             ;;
-	git)
+        git)
             reset_git
             ;;
         tmux)
             reset_tmux
             ;;
-	yaourt)
+        yaourt)
             reset_yaourt
             ;;
-	python)
+        python)
             reset_python
             ;;
-	kak)
+        kak)
             reset_kak
             ;;
-	kak_lsp)
+        kak_lsp)
             reset_kak_lsp
             ;;
         kak_addons)
             reset_kak_addons
             ;;
-	wenv)
+        wenv)
             reset_wenv
             ;;
         all)
@@ -131,7 +130,7 @@ bootstrap_prezto() {
     [[ ! -d "$DOTFILES" ]] && { echo "DOTFILES not set" >&2 ; return 1 }
     cd "$HOME"
     local dotfiles="${DOTFILES#$HOME}"
-    
+
     # prezto init script
     ln -f "$DOTFILES/zsh/zprezto/init.zsh" "$prezto_dir"
     # prezto theme
@@ -207,11 +206,12 @@ bootstrap_kak() {
 }
 
 bootstrap_kak_lsp() {
-    #echo 1 | auradd kak-lsp-git
+    echo 1 | auradd kak-lsp-git
     pacadd bash-language-server
     pip install --user python-language-server black pyls-black
     pip install --user flake8
     [[ ! -d "$HOME/.config" ]] && mkdir "$HOME/.config"
+    [[ ! -f "$DOTFILES/flake8" ]] && { echo "$DOTFILES/flake8 does not exist" >&2 ; return 1 }
     ln -srf "$DOTFILES/flake8" "$HOME/.config/flake8"
 }
 
