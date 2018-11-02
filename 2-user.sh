@@ -70,49 +70,49 @@ bootstrap() {
     esac
 }
 
-reset() {
+revert() {
     local cmd="$1"
     shift
     case "$cmd" in
         prezto)
-            reset_prezto
+            revert_prezto
             ;;
         bin)
-            reset_bin
+            revert_bin
             ;;
         git)
-            reset_git
+            revert_git
             ;;
         tmux)
-            reset_tmux
+            revert_tmux
             ;;
         yaourt)
-            reset_yaourt
+            revert_yaourt
             ;;
         python)
-            reset_python
+            revert_python
             ;;
         kak)
-            reset_kak
+            revert_kak
             ;;
         kak_lsp)
-            reset_kak_lsp
+            revert_kak_lsp
             ;;
         kak_addons)
-            reset_kak_addons
+            revert_kak_addons
             ;;
         wenv)
-            reset_wenv
+            revert_wenv
             ;;
         all)
-            reset_prezto
-            reset_bin
-            reset_git
-            reset_tmux
-            reset_kak
-            reset_python
-            reset_yaourt
-            reset_wenv
+            revert_prezto
+            revert_bin
+            revert_git
+            revert_tmux
+            revert_kak
+            revert_python
+            revert_yaourt
+            revert_wenv
             ;;
         test)
             test
@@ -137,7 +137,7 @@ bootstrap_prezto() {
     ln -f "$DOTFILES/zsh/zprezto/prompt_steeef_setup" "$prezto_dir/modules/prompt/functions"
 }
 
-reset_prezto() {
+revert_prezto() {
     rm -rf "${ZDOTDIR:-$HOME}/.zprezto"
 }
 
@@ -147,7 +147,7 @@ bootstrap_bin() {
     git clone https://github.com/dgrisham/bin "$BIN"
 }
 
-reset_bin() {
+revert_bin() {
     rm -rf "$BIN"
 }
 
@@ -156,7 +156,7 @@ bootstrap_git() {
     pacadd diff-so-fancy
 }
 
-reset_git() {
+revert_git() {
     pacrem diff-so-fancy
 }
 
@@ -167,7 +167,7 @@ bootstrap_tmux() {
     fi
 }
 
-reset_tmux() {
+revert_tmux() {
     pacrem tmux
     unlink "$HOME/.tmux.conf"
 }
@@ -185,7 +185,7 @@ bootstrap_yaourt() {
     done
 }
 
-reset_yaourt() {
+revert_yaourt() {
     pacrem package-query
     pacrem yaourt
 }
@@ -194,7 +194,7 @@ bootstrap_python() {
     pacadd python python-pip
 }
 
-reset_python() {
+revert_python() {
     pacrem python python-pip
 }
 
@@ -235,13 +235,13 @@ bootstrap_kak_addons() {
     done
 }
 
-reset_kak() {
-    reset_kak_lsp
-    reset_kak_addons
+revert_kak() {
+    revert_kak_lsp
+    revert_kak_addons
     aurrem kakoune-git
 }
 
-reset_kak_lsp() {
+revert_kak_lsp() {
     pacrem bash-language-server
     pip uninstall -y python-language-server black pyls-black
     pip uninstall -y flake8
@@ -249,7 +249,7 @@ reset_kak_lsp() {
     #aurrem kak-lsp-git
 }
 
-reset_kak_addons() {
+revert_kak_addons() {
     [[ -z "$SRC" ]] && { echo "SRC not set" >&2 ; return 1 }
 
     for n in 'buffers' 'comnotes' 'grepmenu' 'lineindent'; do
@@ -280,12 +280,17 @@ bootstrap_wenv() {
     compdir="$DOTFILES/zsh/completion"
     [[ ! -d "$compdir" ]] && mkdir "$compdir"
     ln -srf "$SRC/wenv/completion.bash" "$compdir/wenv.bash"
+
+    # install taskwarrior
+    pacadd task
 }
 
-reset_wenv() {
+revert_wenv() {
     unlink "$WENVS/wenv"
     unlink "$DOTFILES/zsh/completion/wenv.bash"
     rm -rf "$SRC/wenv"
+    # uninstall taskwarrior
+    pacrem task
 }
 
 cmd="$1"
@@ -294,7 +299,7 @@ case "$cmd" in
     bootstrap)
         bootstrap $@
         ;;
-    reset)
-        reset $@
+    revert)
+        revert $@
         ;;
 esac
