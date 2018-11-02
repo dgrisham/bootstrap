@@ -12,6 +12,9 @@ git clone https://github.com/dgrisham/dotfiles "$dotfiles"
 for file in $(find "$dotfiles/etc" -type f); do
     sudo cp "$file" "${file#$dotfiles}"
 done
+# reload systemctl and enable autoupdate daemon
+sudo systemctl daemon-reload
+sudo systemctl enable autoupdate
 
 # source profile
 source /etc/zsh/profile
