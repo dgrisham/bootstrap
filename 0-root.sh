@@ -5,13 +5,15 @@ logfile='/tmp/root_log'
 exec 2>> $logfile
 set -ex
 
-ln -sf /usr/share/zoneinfo/America/Denver
+# time
+ln -s /usr/share/zoneinfo/America/Denver /etc/localtime
 hwclock --systohc
 
-# TODO: locale stuff
-
-user='grish'
-basedir="$(dirname $(readlink -f $0))"
+# locale
+sed -i '/^#en_US.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
+locale-gen
+touch /etc/locale.conf
+localectl set-locale LANG=en_US.UTF-8
 
 # make sure we're up to date
 pacman -Syyuq --noconfirm
@@ -21,6 +23,8 @@ pacman -S --noconfirm git
 
 # user
 # ----
+
+user='grish'
 
 # packages required for user setup
 pacman -S --noconfirm zsh sudo
