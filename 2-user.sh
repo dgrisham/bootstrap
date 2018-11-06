@@ -11,6 +11,7 @@ alias auradd='yaourt --noconfirm'
 alias pacrem='sudo pacman -Rsn --noconfirm'
 alias aurrem='yaourt -Rsn --noconfirm'
 
+# TODO: make these profile sources optional
 source /etc/zsh/profile
 source "$HOME/.zsh/profile"
 
@@ -38,6 +39,9 @@ bootstrap() {
         yaourt)
             bootstrap_yaourt
             ;;
+        go)
+            bootstrap_go
+            ;;
         python)
             bootstrap_python
             ;;
@@ -60,6 +64,7 @@ bootstrap() {
             bootstrap_git
             bootstrap_tmux
             bootstrap_yaourt
+            bootstrap_go
             bootstrap_python
             bootstrap_kak
             bootstrap_wenv
@@ -89,6 +94,9 @@ revert() {
         yaourt)
             revert_yaourt
             ;;
+        go)
+            revert_go
+            ;;
         python)
             revert_python
             ;;
@@ -110,6 +118,7 @@ revert() {
             revert_git
             revert_tmux
             revert_kak
+            revert_go
             revert_python
             revert_yaourt
             revert_wenv
@@ -188,6 +197,14 @@ bootstrap_yaourt() {
 revert_yaourt() {
     pacrem package-query
     pacrem yaourt
+}
+
+bootstrap_go() {
+    pacadd go
+}
+
+revert_go() {
+    pacrem go
 }
 
 bootstrap_python() {
