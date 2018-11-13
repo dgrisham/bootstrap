@@ -1,10 +1,7 @@
 #!/bin/zsh
 
-#   -   python language server
-#       -   black, flake8 (be sure to link config after install)
+#   To add:
 #   -   pipenv
-#   -   any other pip stuff?
-#   -   install wenv
 
 alias pacadd='sudo pacman -S --noconfirm'
 alias auradd='yaourt --noconfirm'
@@ -56,6 +53,7 @@ bootstrap() {
             ;;
         wenv)
             bootstrap_wenv
+            bootstrap_taskwarrior
             ;;
         all)
             sudo pacman -Syyu --noconfirm
@@ -68,6 +66,7 @@ bootstrap() {
             bootstrap_python
             bootstrap_kak
             bootstrap_wenv
+            bootstrap_taskwarrior
             ;;
         *)
             echo "Unrecognized bootstrap request: '$cmd'" >&2
@@ -111,6 +110,7 @@ revert() {
             ;;
         wenv)
             revert_wenv
+            revert_taskwarrior
             ;;
         all)
             revert_prezto
@@ -122,9 +122,7 @@ revert() {
             revert_python
             revert_yaourt
             revert_wenv
-            ;;
-        test)
-            test
+            revert_taskwarrior
             ;;
         *)
             echo "Unrecognized bootstrap request: '$cmd'" >&2
@@ -263,7 +261,7 @@ revert_kak_lsp() {
     pip uninstall -y python-language-server black pyls-black
     pip uninstall -y flake8
     unlink "$HOME/.config/flake8"
-    #aurrem kak-lsp-git
+    aurrem kak-lsp-git
 }
 
 revert_kak_addons() {
@@ -297,17 +295,21 @@ bootstrap_wenv() {
     compdir="$DOTFILES/zsh/completion"
     [[ ! -d "$compdir" ]] && mkdir "$compdir"
     ln -srf "$SRC/wenv/completion.bash" "$compdir/wenv.bash"
-
-    # install taskwarrior
-    pacadd task
 }
 
 revert_wenv() {
     unlink "$WENVS/wenv"
     unlink "$DOTFILES/zsh/completion/wenv.bash"
     rm -rf "$SRC/wenv"
-    # uninstall taskwarrior
-    pacrem task
+}
+
+bootstrap_taskwarrior() {
+    # expect package gives `unbuffer` command
+    pacadd task expect
+}
+
+revert_taskwarrior() {
+    pacrem task expect
 }
 
 cmd="$1"
