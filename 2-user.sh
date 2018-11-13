@@ -2,6 +2,7 @@
 
 #   To add:
 #   -   pipenv
+#   -   dependency controls (e.g. 'uninstall wenv' vs. 'uninstall wenv + its deps'
 
 alias pacadd='sudo pacman -S --noconfirm'
 alias auradd='yaourt --noconfirm'
