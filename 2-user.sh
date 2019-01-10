@@ -313,6 +313,26 @@ revert_taskwarrior() {
     pacrem task expect
 }
 
+bootstrap_x() {
+    # bootstrap_i3
+    # bootstrap_urxvt
+}
+
+bootstrap_urxvt() {
+    #auradd rxvt-unicode
+    mkdir -p $HOME/.urxvt
+}
+
+revert_urxvt() {
+    #aurrem rxvt-unicode
+    rm -rf $HOME/.urxvt
+}
+
+revert_x() {
+    # revert_i3
+    # revert_urxvt
+}
+
 cmd="$1"
 shift
 case "$cmd" in
