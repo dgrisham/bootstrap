@@ -41,6 +41,7 @@ echo "$user ALL=(ALL) NOPASSWD: ALL" | EDITOR='tee -a' visudo
 pacman -Syyu --noconfirm
 sudo -H -u "$user" ./1-env.sh
 sudo -H -u "$user" ./2-user.sh bootstrap all
+sudo -H -u "$user" ./3-extra.sh
 
 # remove password-less sudo privilege for user
 sed -i "/$user ALL=(ALL) NOPASSWD: ALL/d" /etc/sudoers
