@@ -6,9 +6,15 @@ exec 2>> $logfile
 set -ex
 
 cd "$HOME"
-dotfiles="$HOME/dotfiles"
 # would be nice to get dotfiles location from cloned zshrc, but chicken vs. egg
+dotfiles="$HOME/dotfiles"
 git clone https://github.com/dgrisham/dotfiles "$dotfiles"
+branch='bakegood'
+cd "$dotfiles"
+git fetch origin "$branch"
+git checkout "$branch"
+cd "$HOME"
+
 for file in $(find "$dotfiles/etc" -type f); do
     sudo cp "$file" "${file#$dotfiles}"
 done

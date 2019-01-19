@@ -1,7 +1,6 @@
 #!/bin/zsh
 
 #   To add:
-#   -   pipenv
 #   -   dependency controls (e.g. 'uninstall wenv' vs. 'uninstall wenv + its deps'
 
 alias pacadd='sudo pacman -S --noconfirm'
@@ -207,11 +206,13 @@ revert_go() {
 }
 
 bootstrap_python() {
-    pacadd python python-pip
+    pacadd python python-pip python-pipenv
+    echo 1 | auradd pyenv
 }
 
 revert_python() {
-    pacrem python python-pip
+    pacrem python python-pip python-pipenv
+    aurrem pyenv
 }
 
 bootstrap_kak() {
