@@ -6,7 +6,6 @@ exec 2>> $logfile
 set -ex
 
 # time
-ln -s /usr/share/zoneinfo/America/Denver /etc/localtime
 hwclock --systohc
 
 # locale
