@@ -291,12 +291,12 @@ bootstrap_wenv() {
     [[ -z "$WENVS" ]] && { echo "WENVS not set" >&2 ; return 1 }
     [[ ! -d "$SRC" ]] && mkdir "$SRC"
     git clone https://github.com/dgrisham/wenv "$SRC/wenv"
-    ln -srf "$SRC/wenv/wenv" "$WENVS"
+    ln -sf "$SRC/wenv/wenv" "$WENVS"
 
     [[ ! -d "$DOTFILES" ]] && { echo "DOTFILES not set" >&2 ; return 1 }
     compdir="$DOTFILES/zsh/completion"
     [[ ! -d "$compdir" ]] && mkdir "$compdir"
-    ln -srf "$SRC/wenv/completion.bash" "$compdir/wenv.bash"
+    ln -sf "$SRC/wenv/completion.bash" "$compdir/wenv.bash"
 }
 
 revert_wenv() {
