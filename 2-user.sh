@@ -58,6 +58,9 @@ bootstrap() {
             bootstrap_wenv
             bootstrap_taskwarrior
             ;;
+        ipfs)
+            bootstrap_ipfs
+            ;;
         all)
             sudo pacman -Syyu --noconfirm
             bootstrap_prezto
@@ -65,11 +68,12 @@ bootstrap() {
             bootstrap_git
             bootstrap_tmux
             bootstrap_yaourt
-            bootstrap_go
             bootstrap_python
+            bootstrap_go
             bootstrap_kak
             bootstrap_wenv
             bootstrap_taskwarrior
+            bootstrap_ipfs
             ;;
         *)
             echo "Unrecognized bootstrap request: '$cmd'" >&2
@@ -118,17 +122,21 @@ revert() {
             revert_wenv
             revert_taskwarrior
             ;;
+        ipfs)
+            revert_ipfs
+            ;;
         all)
             revert_prezto
             revert_bin
             revert_git
             revert_tmux
             revert_kak
-            revert_go
             revert_python
+            revert_go
             revert_yaourt
             revert_wenv
             revert_taskwarrior
+            revert_ipfs
             ;;
         *)
             echo "Unrecognized bootstrap request: '$cmd'" >&2
@@ -209,6 +217,7 @@ bootstrap_go() {
 
 revert_go() {
     pacrem go
+    rm -rf $GOPATH
 }
 
 bootstrap_python() {
@@ -275,12 +284,12 @@ revert_kak() {
 }
 
 revert_kak_lsp() {
-    revert_rust
     pacrem bash-language-server
     pip uninstall -y python-language-server black pyls-black
     pip uninstall -y flake8
     unlink "$HOME/.config/flake8"
     aurrem kak-lsp-git
+    revert_rust
 }
 
 revert_kak_addons() {
@@ -329,6 +338,40 @@ bootstrap_taskwarrior() {
 
 revert_taskwarrior() {
     pacrem task expect
+}
+
+bootstrap_ipfs() {
+    bootstrap_gx
+    go get -u -d github.com/ipfs/go-ipfs
+    cd $GOPATH/src/github.com/ipfs/go-ipfs
+    git remote set-url personal git@github.com:dgrisham/go-ipfs
+    git fetch personal impl/bitswap/strategy-prq
+    # TODO: will this checkout work, or need to specify 'personal'?
+    git checkout impl/bitswap/strategy-prq
+    # TODO: pull my branches for go-bitswap and go-ipfs-config and do
+    # gx/vendor stuff with links
+    gx-go lock-gen > gx-lock.json
+    gx lock-install
+    # go get -u -d github.com/ipfs/go-bitswap
+    # go get -u -d github.com/ipfs/go-ipfs-config
+    # TODO: need to make install before gx'ing things?
+    make install
+}
+
+revert_ipfs() {
+    rm -f "$GOPATH/bin/ipfs"
+    rm -rf "$GOPATH/src/github.com/ipfs/go-ipfs"
+    revert_gx
+}
+
+bootstrap_gx() {
+    go get -u github.com/whyrusleeping/gx
+    go get -u github.com/whyrusleeping/gx-go
+}
+
+revert_gx() {
+    rm -f "$GOPATH/bin/gx{,-go}"
+    rm -rf "$GOPATH/src/github.com/whyrusleeping/gx{,-go}"
 }
 
 cmd="$1"
