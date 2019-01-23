@@ -42,6 +42,9 @@ bootstrap() {
         python)
             bootstrap_python
             ;;
+        rust)
+            bootstrap_rust
+            ;;
         kak)
             bootstrap_kak
             ;;
@@ -98,6 +101,9 @@ revert() {
             ;;
         python)
             revert_python
+            ;;
+        rust)
+            revert_rust
             ;;
         kak)
             revert_kak
@@ -215,14 +221,24 @@ revert_python() {
     aurrem pyenv
 }
 
+bootstrap_rust() {
+    pacadd rustup
+    rustup install nightly
+    rustup default nightly
+}
+
+revert_rust() {
+    pacrem rustup
+}
+
 bootstrap_kak() {
-    # text editor
     echo 1 | auradd kakoune-git
     bootstrap_kak_lsp
     bootstrap_kak_addons
 }
 
 bootstrap_kak_lsp() {
+    bootstrap_rust
     echo 1 | auradd kak-lsp-git
     pacadd bash-language-server
     pip install --user python-language-server black pyls-black
@@ -259,6 +275,7 @@ revert_kak() {
 }
 
 revert_kak_lsp() {
+    revert_rust
     pacrem bash-language-server
     pip uninstall -y python-language-server black pyls-black
     pip uninstall -y flake8
