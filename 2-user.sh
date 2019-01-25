@@ -342,19 +342,32 @@ revert_taskwarrior() {
 
 bootstrap_ipfs() {
     bootstrap_gx
+
     go get -u -d github.com/ipfs/go-ipfs
-    cd $GOPATH/src/github.com/ipfs/go-ipfs
-    git remote set-url personal git@github.com:dgrisham/go-ipfs
+    cd "$GOPATH/src/github.com/ipfs/go-ipfs"
+    git remote add personal https://github.com/dgrisham/go-ipfs
     git fetch personal impl/bitswap/strategy-prq
-    # TODO: will this checkout work, or need to specify 'personal'?
-    git checkout impl/bitswap/strategy-prq
-    # TODO: pull my branches for go-bitswap and go-ipfs-config and do
-    # gx/vendor stuff with links
+    git checkout -t personal/impl/bitswap/strategy-prq
+
     gx-go lock-gen > gx-lock.json
     gx lock-install
-    # go get -u -d github.com/ipfs/go-bitswap
-    # go get -u -d github.com/ipfs/go-ipfs-config
-    # TODO: need to make install before gx'ing things?
+
+    go get -u -d github.com/ipfs/go-bitswap
+    cd "$GOPATH/src/github.com/ipfs/go-bitswap"
+    git remote add personal https://github.com/dgrisham/go-bitswap
+    git fetch personal impl/strategy-prq
+    git checkout -t personal/impl/strategy-prq
+
+    go get -u -d github.com/ipfs/go-ipfs-config
+    cd "$GOPATH/src/github.com/ipfs/go-ipfs-config"
+    git remote add personal https://github.com/dgrisham/go-ipfs-config
+    git fetch personal experimental/bitswap-strategy-config
+    git checkout -t personal/experimental/bitswap-strategy-config
+
+    ln -srf "$GOPATH/src/github.com/ipfs/go-bitswap" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
+    ln -srf "$GOPATH/src/github.com/ipfs/go-ipfs-config" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
+    cd "$GOPATH/src/github.com/ipfs/go-ipfs"
+    #TODO: paths in vendor need to be relative for docker images
     make install
 }
 
