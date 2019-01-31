@@ -366,8 +366,8 @@ bootstrap_ipfs() {
 
     ln -srf "$GOPATH/src/github.com/ipfs/go-bitswap" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
     ln -srf "$GOPATH/src/github.com/ipfs/go-ipfs-config" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
+
     cd "$GOPATH/src/github.com/ipfs/go-ipfs"
-    #TODO: paths in vendor need to be relative for docker images
     make install
 }
 
