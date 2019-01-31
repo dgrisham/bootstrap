@@ -58,9 +58,6 @@ bootstrap() {
             bootstrap_wenv
             bootstrap_taskwarrior
             ;;
-        ipfs)
-            bootstrap_ipfs
-            ;;
         all)
             sudo pacman -Syyu --noconfirm
             bootstrap_prezto
@@ -122,9 +119,6 @@ revert() {
             revert_wenv
             revert_taskwarrior
             ;;
-        ipfs)
-            revert_ipfs
-            ;;
         all)
             revert_prezto
             revert_bin
@@ -139,7 +133,7 @@ revert() {
             revert_ipfs
             ;;
         *)
-            echo "Unrecognized bootstrap request: '$cmd'" >&2
+            echo "Unrecognized revert request: '$cmd'" >&2
             ;;
     esac
 }
@@ -338,53 +332,6 @@ bootstrap_taskwarrior() {
 
 revert_taskwarrior() {
     pacrem task expect
-}
-
-bootstrap_ipfs() {
-    bootstrap_gx
-
-    go get -u -d github.com/ipfs/go-ipfs
-    cd "$GOPATH/src/github.com/ipfs/go-ipfs"
-    git remote add personal https://github.com/dgrisham/go-ipfs
-    git fetch personal impl/bitswap/strategy-prq
-    git checkout -t personal/impl/bitswap/strategy-prq
-
-    gx-go lock-gen > gx-lock.json
-    gx lock-install
-
-    go get -u -d github.com/ipfs/go-bitswap
-    cd "$GOPATH/src/github.com/ipfs/go-bitswap"
-    git remote add personal https://github.com/dgrisham/go-bitswap
-    git fetch personal impl/strategy-prq
-    git checkout -t personal/impl/strategy-prq
-
-    go get -u -d github.com/ipfs/go-ipfs-config
-    cd "$GOPATH/src/github.com/ipfs/go-ipfs-config"
-    git remote add personal https://github.com/dgrisham/go-ipfs-config
-    git fetch personal experimental/bitswap-strategy-config
-    git checkout -t personal/experimental/bitswap-strategy-config
-
-    ln -srf "$GOPATH/src/github.com/ipfs/go-bitswap" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
-    ln -srf "$GOPATH/src/github.com/ipfs/go-ipfs-config" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
-
-    cd "$GOPATH/src/github.com/ipfs/go-ipfs"
-    make install
-}
-
-revert_ipfs() {
-    rm -f "$GOPATH/bin/ipfs"
-    rm -rf "$GOPATH/src/github.com/ipfs/go-ipfs"
-    revert_gx
-}
-
-bootstrap_gx() {
-    go get -u github.com/whyrusleeping/gx
-    go get -u github.com/whyrusleeping/gx-go
-}
-
-revert_gx() {
-    rm -f "$GOPATH/bin/gx{,-go}"
-    rm -rf "$GOPATH/src/github.com/whyrusleeping/gx{,-go}"
 }
 
 cmd="$1"
