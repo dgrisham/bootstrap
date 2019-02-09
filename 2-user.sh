@@ -244,8 +244,7 @@ bootstrap_kak_lsp() {
     bootstrap_rust
     echo 1 | auradd kak-lsp-git
     pacadd bash-language-server
-    pip install --user python-language-server black pyls-black
-    pip install --user flake8
+    pip install --user python-language-server black pyls-black flake8
     [[ ! -d "$HOME/.config" ]] && mkdir "$HOME/.config"
     [[ ! -f "$DOTFILES/flake8" ]] && { echo "$DOTFILES/flake8 does not exist" >&2 ; return 1 }
     ln -srf "$DOTFILES/flake8" "$HOME/.config/flake8"
