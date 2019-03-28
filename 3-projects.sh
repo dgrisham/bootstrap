@@ -109,3 +109,14 @@ revert_gx() {
     rm -f "$GOPATH/bin/gx{,-go}"
     rm -rf "$GOPATH/src/github.com/whyrusleeping/gx{,-go}"
 }
+
+cmd="$1"
+shift
+case "$cmd" in
+    bootstrap)
+        bootstrap $@
+        ;;
+    revert)
+        revert $@
+        ;;
+esac
