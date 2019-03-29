@@ -21,21 +21,18 @@ bootstrap() {
             bootstrap_gx
             ;;
         ipfs)
-            bootstrap_gx
+            bootstrap gx
             bootstrap_ipfs
             ;;
         docker)
             bootstrap_docker
             ;;
         iptb)
-            bootstrap_docker
+            bootstrap docker
             bootstrap_iptb
             ;;
         all)
-            # would be cleaner if 'all' called bootstrap function (e.g. `bootstrap ipfs`
-            # instead of `bootstrap_ipfs`). handles dependencies/ordering better
-            bootstrap_gx
-            bootstrap_ipfs
+            bootstrap ipfs
             ;;
         *)
             echo "Unrecognized bootstrap request: '$cmd'" >&2
@@ -52,18 +49,17 @@ revert() {
             ;;
         ipfs)
             revert_ipfs
-            revert_gx
+            revert gx
             ;;
         docker)
             revert_docker
             ;;
         iptb)
-            revert_docker
+            revert docker
             revert_iptb
             ;;
         all)
-            revert_ipfs
-            revert_gx
+            revert ipfs
             ;;
         *)
             echo "Unrecognized revert request: '$cmd'" >&2
