@@ -305,10 +305,12 @@ revert_kak_addons() {
 
 bootstrap_wenv() {
     [[ -z "$SRC" ]] && { echo "SRC not set" >&2 ; return 1 }
-    [[ -z "$WENVS" ]] && { echo "WENVS not set" >&2 ; return 1 }
     [[ ! -d "$SRC" ]] && mkdir "$SRC"
     git clone https://github.com/dgrisham/wenv "$SRC/wenv"
-    ln -sf "$SRC/wenv/wenv" "$WENVS"
+
+    local wenv_cfg="${XDG_CONFIG_HOME:-$HOME/.config}/wenv"
+    ln -sf "$SRC/wenv/wenv" "$wenv_cfg/wenvs"
+    ln -s "$SRC/wenv/template" "$wenv_cfg/template"
 
     [[ ! -d "$DOTFILES" ]] && { echo "DOTFILES not set" >&2 ; return 1 }
     compdir="$DOTFILES/zsh/completion"
@@ -317,7 +319,9 @@ bootstrap_wenv() {
 }
 
 revert_wenv() {
-    unlink "$WENVS/wenv"
+    local wenv_cfg="${XDG_CONFIG_HOME:-$HOME/.config}/wenv"
+    unlink "$wenv_cfg/wenvs/wenv"
+    unlink "$wenv_cfg/template"
     unlink "$DOTFILES/zsh/completion/wenv.bash"
     rm -rf "$SRC/wenv"
 }
