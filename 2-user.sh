@@ -329,6 +329,7 @@ revert_wenv() {
 bootstrap_taskwarrior() {
     # expect package gives `unbuffer` command
     pacadd task expect
+    ln -s "$DOTFILES/task/taskrc" "$HOME/.taskrc"
 }
 
 revert_taskwarrior() {
