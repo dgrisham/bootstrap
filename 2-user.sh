@@ -131,7 +131,7 @@ revert() {
             revert_taskwarrior
             ;;
         *)
-            echo "Unrecognized bootstrap request: '$cmd'" >&2
+            echo "Unrecognized revert request: '$cmd'" >&2
             ;;
     esac
 }
