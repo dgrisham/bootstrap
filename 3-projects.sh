@@ -59,7 +59,9 @@ revert() {
 
 bootstrap_iptb() {
     go get -u github.com/ipfs/iptb
-    # TODO: set up plugins + whatever else is needed here
+    go get -d github.com/ipfs/iptb-plugins
+    cd $GOPATH/src/github.com/ipfs/iptb-plugins
+    make install
 }
 
 revert_iptb() {
@@ -88,11 +90,15 @@ bootstrap_ipfs() {
     git fetch personal experimental/bitswap-strategy-config
     git checkout -t personal/experimental/bitswap-strategy-config
 
-    ln -srf "$GOPATH/src/github.com/ipfs/go-bitswap" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
-    ln -srf "$GOPATH/src/github.com/ipfs/go-ipfs-config" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
+    unlink "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
+    unlink "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
+    cp -r "$GOPATH/src/github.com/ipfs/go-bitswap" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
+    cp -r "$GOPATH/src/github.com/ipfs/go-ipfs-config" "$GOPATH/src/github.com/ipfs/go-ipfs/vendor/github.com/ipfs"
 
     cd "$GOPATH/src/github.com/ipfs/go-ipfs"
     make install
+    mkdir -p "$HOME/.ipfs"
+    cp "$GOPATH/src/github.com/ipfs/go-ipfs/misc/completion/ipfs-completion.bash" "$HOME/.ipfs/completion.bash"
 }
 
 revert_ipfs() {
