@@ -207,9 +207,12 @@ revert_yaourt() {
 
 bootstrap_go() {
     pacadd go
+    go get -u github.com/sourcegraph/go-langserver
 }
 
 revert_go() {
+    rm -f "$GOPATH/bin/go-langserver"
+    rm -rf "$GOPATH/src/github.com/sourcegraph/go-langserver"
     pacrem go
     rm -rf $GOPATH
 }
