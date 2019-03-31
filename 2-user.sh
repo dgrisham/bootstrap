@@ -207,14 +207,13 @@ revert_yaourt() {
 
 bootstrap_go() {
     pacadd go
-    go get -u github.com/sourcegraph/go-langserver
+    go get -u github.com/saibing/bingo
 }
 
 revert_go() {
-    rm -f "$GOPATH/bin/go-langserver"
-    rm -rf "$GOPATH/src/github.com/sourcegraph/go-langserver"
+    rm -f "$GOPATH/bin/bingo"
+    rm -rf "$GOPATH/src/github.com/saibing/bingo"
     pacrem go
-    rm -rf $GOPATH
 }
 
 bootstrap_python() {
