@@ -300,7 +300,7 @@ revert_kak_addons() {
     if [ -z "$(ls -A $kakfiles)" ]; then
         rm -rf "$kakfiles"
     fi
-    autoload="$DOTFILES/kak/autoload"
+    local autoload="$DOTFILES/kak/autoload"
     if [ -z "$(find $autoload \! -name autoload)" ]; then
         unlink "$DOTFILES/kak/autoload/autoload"
         rm -rf "$DOTFILES/kak/autoload"
@@ -309,15 +309,15 @@ revert_kak_addons() {
 
 bootstrap_wenv() {
     [[ -z "$SRC" ]] && { echo "SRC not set" >&2 ; return 1 }
-    [[ -z "$WENVS" ]] && { echo "WENVS not set" >&2 ; return 1 }
+    # [[ -z "$WENVS" ]] && { echo "WENVS not set" >&2 ; return 1 }
     [[ ! -d "$SRC" ]] && mkdir "$SRC"
     git clone https://github.com/dgrisham/wenv "$SRC/wenv"
-    ln -srf "$SRC/wenv/wenv" "$WENVS"
+    ln -sf "$SRC/wenv/wenv" "$DOTFILES/wenv/wenvs"
 
     [[ ! -d "$DOTFILES" ]] && { echo "DOTFILES not set" >&2 ; return 1 }
-    compdir="$DOTFILES/zsh/completion"
+    local compdir="$DOTFILES/zsh/completion"
     [[ ! -d "$compdir" ]] && mkdir "$compdir"
-    ln -srf "$SRC/wenv/completion.bash" "$compdir/wenv.bash"
+    ln -sf "$SRC/wenv/completion.bash" "$compdir/wenv.bash"
 }
 
 revert_wenv() {
